@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Successful - E-Commerce Application{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        <div class="card shadow border-0 p-5">
+            <div class="mb-4">
+                <div class="display-1 text-success">✅</div>
+            </div>
+            <h2 class="fw-bold mb-3">Order Placed Successfully!</h2>
+            <p class="text-muted fs-5 mb-4">
+                Thank you for your purchase. Your order <strong>#{{ order_id }}</strong> has been received and is being processed.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{% url 'order_history' %}" class="btn btn-primary px-4">View My Orders</a>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-secondary px-4">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

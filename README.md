@@ -100,3 +100,25 @@ Building Full Stack Django Ecommerce Application
   - `python manage.py startapp orders`
   - `python manage.py makemigrations orders`
   - `python manage.py migrate`
+
+### Phase 8: Final Polish & Mock Payment
+- **Branch**: `feature/final-polish-deployment`
+- **Features Completed**:
+  - **Mock Payment Gateway**: Added a processing state to the checkout button using JavaScript and a dedicated "Order Success" landing page.
+  - **Premium UI**: Implemented a global design system using the "Outfit" font, sleek glassmorphism navbars, and card hover animations.
+  - **Modern Home Page**: Replaced the basic home view with a high-end hero section and feature highlights.
+  - **Responsiveness**: Ensured all pages (Cart, Checkout, Dashboards) use Bootstrap's grid for mobile-friendly layouts.
+  - **Final Consolidation**: Merged all feature branches into `development` and then into `main`.
+
+---
+
+## 🚀 Deployment Instructions
+1. **Clone the repository**: `git clone <repo-url>`
+2. **Setup Virtual Environment**: `python -m venv venv` and `.\venv\Scripts\activate`
+3. **Install Dependencies**: `pip install django mysqlclient pillow`
+4. **Database Configuration**:
+   - Create a MySQL database named `ecommerce_project`.
+   - Update `settings.py` with your MySQL credentials.
+5. **Run Migrations**: `python manage.py migrate`
+6. **Create Admin**: `python manage.py createsuperuser`
+7. **Run Server**: `python manage.py run dev`

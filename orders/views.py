@@ -64,11 +64,18 @@ def checkout(request):
                 cart.items.all().delete()
 
             messages.success(request, f'Order #{order.short_uuid} placed successfully!')
-            return redirect('order_detail', order_uuid=order.order_uuid)
+            return redirect('order_success', order_uuid=order.order_uuid)
     else:
         form = CheckoutForm(initial=initial)
 
     return render(request, 'orders/checkout.html', {'form': form, 'cart': cart})
+
+
+@login_required
+def order_success(request, order_uuid):
+    """Simple thank you page after order placement."""
+    order = get_object_or_404(Order, order_uuid=order_uuid, customer=request.user)
+    return render(request, 'orders/success.html', {'order_id': order.short_uuid})
 
 
 @login_required

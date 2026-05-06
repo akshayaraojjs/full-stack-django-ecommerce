@@ -3,13 +3,49 @@
 {% block title %}Home - E-Commerce Application{% endblock %}
 
 {% block content %}
-<div class="row text-center mt-5">
-    <div class="col-md-12">
-        <h1 class="display-4">Welcome to our E-Commerce Store</h1>
-        <p class="lead">Find the best products at the best prices.</p>
-        <hr class="my-4">
-        <p>Explore our categories and deals today.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Shop Now</a>
+<div class="row align-items-center py-5">
+    <div class="col-lg-6">
+        <h1 class="display-3 fw-bold mb-3" style="letter-spacing: -1.5px;">Premium Shopping, <span class="text-primary">Redefined.</span></h1>
+        <p class="lead text-muted mb-4 fs-4">Discover curated collections from top vendors. Quality products, seamless experience, delivered to your door.</p>
+        <div class="d-flex gap-3">
+            <a class="btn btn-primary btn-lg shadow-sm px-5" href="{% url 'product_list' %}">Shop Catalog</a>
+            {% if not user.is_authenticated %}
+                <a class="btn btn-outline-dark btn-lg px-5" href="{% url 'register_customer' %}">Join Now</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+        <div class="bg-primary rounded shadow-lg p-5 text-white text-center" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center; transform: skewY(-2deg);">
+            <div style="transform: skewY(2deg);">
+                <h2 class="display-1">🛒</h2>
+                <h2 class="fw-bold">Multi-Vendor</h2>
+                <p class="fs-4">The ultimate marketplace for quality goods.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 text-center">
+    <div class="col-md-4 mb-4">
+        <div class="p-4 bg-white rounded shadow-sm border h-100">
+            <div class="fs-1 mb-3">🛡️</div>
+            <h5 class="fw-bold">Secure Payments</h5>
+            <p class="text-muted small">Your transactions are encrypted and protected by our mock secure gateway.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="p-4 bg-white rounded shadow-sm border h-100">
+            <div class="fs-1 mb-3">🚚</div>
+            <h5 class="fw-bold">Fast Delivery</h5>
+            <p class="text-muted small">We partner with top logistics to ensure your products arrive on time.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="p-4 bg-white rounded shadow-sm border h-100">
+            <div class="fs-1 mb-3">🤝</div>
+            <h5 class="fw-bold">Role-Based Access</h5>
+            <p class="text-muted small">Specialized dashboards for Admins, Sellers, and Customers.</p>
+        </div>
     </div>
 </div>
 {% endblock %}

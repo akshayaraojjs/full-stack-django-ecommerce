@@ -22,7 +22,7 @@
                     </div>
                     {% endfor %}
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-success btn-lg fw-bold">
+                        <button type="submit" class="btn btn-success btn-lg fw-bold" id="placeOrderBtn">
                             ✅ Place Order — ₹{{ cart.total_price }}
                         </button>
                     </div>
@@ -58,4 +58,14 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+        const btn = document.getElementById('placeOrderBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing Payment...';
+    });
+</script>
 {% endblock %}
