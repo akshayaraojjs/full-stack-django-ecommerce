@@ -1,0 +1,614 @@
+# Detailed Master Prompt for AI Agent
+
+Django Full Stack Role-Based E-Commerce Application (Phase-by-Phase Development)
+
+# Project Title
+
+Role-Based Multi-Vendor E-Commerce Application
+
+# Objective
+
+Build a complete Django Full Stack E-Commerce Web Application using:
+
+* Python
+* Django
+* MySQL
+* HTML5
+* CSS3
+* Bootstrap 5
+* JavaScript
+
+The application must follow:
+
+* Modular architecture
+* Clean coding standards
+* Role-Based Authentication
+* Git branching workflow
+* Phase-wise implementation
+* UUID-based identification system
+* SKU-based inventory management
+
+# Important Development Rules
+
+1. Git Workflow Rules
+
+Each phase MUST:
+
+* Be developed in a separate Git branch
+* Be committed properly
+* Be merged into `main` branch after testing
+* Include at least one intentional minor merge conflict demonstration
+
+2. Branch Naming Convention
+
+main
+development
+
+feature/authentication
+feature/user-management
+feature/product-management
+feature/cart-module
+feature/order-management
+feature/review-module
+feature/wishlist-module
+feature/admin-dashboard
+feature/notification-module
+feature/invoice-module
+feature/search-filter
+feature/ui-enhancement
+feature/api-enhancement
+
+# Git Workflow Instructions
+
+For every phase:
+
+git checkout development
+git pull origin development
+
+git checkout -b feature/module-name
+
+After completion:
+
+git add .
+git commit -m "Completed Authentication Module"
+
+git push origin feature/module-name
+
+Merge process:
+
+git checkout development
+git merge feature/module-name
+
+Final merge:
+
+git checkout main
+git merge development
+
+# Merge Conflict Demonstration Requirement
+
+During at least 2 modules:
+
+* Modify same HTML file in two branches
+* Modify same CSS file in two branches
+* Create intentional merge conflict
+* Resolve conflict manually
+* Commit resolved version
+
+Example:
+
+CONFLICT (content): Merge conflict in templates/base.html
+
+Resolve manually and commit:
+
+git add .
+git commit -m "Resolved merge conflict in base.html"
+
+# Core Architecture Requirements
+
+# Authentication System
+
+Use Django Authentication System.
+
+Roles:
+
+* Admin
+* Customer
+* Seller/Vendor
+
+Requirements:
+
+* Role-based login redirection
+* Session management
+* Access control decorators
+* Unauthorized page handling
+
+# UUID Requirements
+
+The following entities MUST use UUID instead of integer IDs.
+
+UUID Entities
+
+| Entity        | UUID Required |
+| Customer      | YES           |
+| Seller/Vendor | YES           |
+| Invoice       | YES           |
+| Orders        | YES           |
+
+UUID Example
+
+python
+import uuid
+
+customer_id = models.UUIDField(
+    primary_key=True,
+    default=uuid.uuid4,
+    editable=False
+)
+
+# SKU Requirements
+
+Every product MUST have a unique SKU.
+
+Format:
+
+text
+ELEC-0001
+BOOK-0002
+FASH-0003
+
+SKU Rules:
+
+* Auto-generated
+* Unique
+* Category-based prefix
+* Immutable after creation
+
+# Suggested SKU Generator Logic
+
+Example:
+
+python
+category_prefix = "ELEC"
+product_count = Product.objects.count() + 1
+
+sku = f"{category_prefix}-{product_count:04d}"
+
+# Project Structure
+
+text
+ecommerce_project/
+│
+├── accounts/
+├── products/
+├── cart/
+├── orders/
+├── invoices/
+├── reviews/
+├── wishlist/
+├── dashboard/
+├── notifications/
+├── templates/
+├── static/
+├── media/
+└── requirements.txt
+
+------------------------------------------------------------------------------------------------
+# PHASE-WISE DEVELOPMENT PLAN
+
+# PHASE 1 — Project Initialization
+
+Branch
+
+feature/project-setup
+
+Tasks
+
+* Create Django project
+* Configure MySQL database
+* Setup virtual environment
+* Configure static & media files
+* Setup Bootstrap
+* Create base template
+* Configure Git repository
+* Create reusable navbar/footer
+
+Deliverables
+
+* Working Django project
+* MySQL connection
+* Base layout
+--------------------------------------------------------------------------------------
+# PHASE 2 — Authentication & Role-Based Login
+
+Branch
+
+feature/authentication
+
+Modules
+
+#User Registration
+
+* Customer Registration
+* Seller Registration
+
+#Authentication
+
+* Login
+* Logout
+* Password hashing
+
+#Role-Based Redirects
+
+| Role     | Redirect           |
+| Admin    | Admin Dashboard    |
+| Customer | Customer Dashboard |
+| Seller   | Seller Dashboard   |
+
+Requirements
+
+* UUID for users
+* Email uniqueness
+* Form validation
+* Bootstrap forms
+* Django messages framework
+
+Database Tables
+
+#users
+
+| Field     | Type    |
+|  | - |
+| user_uuid | UUID    |
+| username  | VARCHAR |
+| email     | VARCHAR |
+| password  | VARCHAR |
+| role      | VARCHAR |
+| is_active | BOOLEAN |
+
+--------------------------------------------------------------------------------------
+# PHASE 3 — User Profile Management
+
+Branch
+
+feature/user-management
+
+Features
+
+* Edit Profile
+* Upload Profile Image
+* Address Management
+* Contact Details
+* Seller Store Information
+
+Tables
+
+#user_profile
+
+| Field         | Type    |
+| profile_id    | INT     |
+| user_uuid     | FK      |
+| phone         | VARCHAR |
+| address       | TEXT    |
+| profile_image | VARCHAR |
+
+--------------------------------------------------------------------------------------
+# PHASE 4 — Product Management
+
+Branch
+
+feature/product-management
+
+Features
+
+#Seller Side
+
+* Add Product
+* Edit Product
+* Delete Product
+* Upload Multiple Images
+* Manage Stock
+
+#Admin Side
+
+* Approve Products
+* Block Products
+
+Product Requirements
+
+* SKU generation mandatory
+* Category mapping
+* Stock tracking
+
+Database Schema
+
+#products
+
+| Field        | Type           |
+| product_id   | INT            |
+| seller_uuid  | UUID           |
+| category_id  | FK             |
+| sku          | VARCHAR UNIQUE |
+| product_name | VARCHAR        |
+| description  | TEXT           |
+| price        | DECIMAL        |
+| stock        | INT            |
+| status       | VARCHAR        |
+
+--------------------------------------------------------------------------------------
+# PHASE 5 — Product Listing & Search
+
+Branch
+
+feature/search-filter
+
+Features
+
+* Product Listing
+* Search by name
+* Filter by category
+* Filter by price
+* Sort by price
+* Pagination
+
+JavaScript Requirements
+
+* Dynamic search
+* AJAX filter updates
+
+--------------------------------------------------------------------------------------
+# PHASE 6 — Shopping Cart Module
+
+Branch
+
+feature/cart-module
+
+Features
+
+* Add to cart
+* Remove from cart
+* Quantity update
+* Total calculation
+* Session cart for guest users
+
+Tables
+
+#cart
+
+| Field     | Type |
+| cart_id   | INT  |
+| user_uuid | UUID |
+
+#cart_items
+
+| Field        | Type |
+| cart_item_id | INT  |
+| cart_id      | FK   |
+| product_id   | FK   |
+| quantity     | INT  |
+
+--------------------------------------------------------------------------------------
+# PHASE 7 — Order Management
+
+Branch
+
+feature/order-management
+
+Features
+
+* Place Order
+* Order Summary
+* Order History
+* Order Tracking
+* Seller Order Processing
+* Order Status Updates
+
+Order UUID Requirement
+
+Each order must use UUID.
+
+Example:
+
+python
+order_uuid = models.UUIDField(
+    default=uuid.uuid4,
+    editable=False,
+    unique=True
+)
+
+Tables
+
+#orders
+
+| Field         | Type     |
+| order_uuid    | UUID     |
+| customer_uuid | UUID     |
+| total_amount  | DECIMAL  |
+| order_status  | VARCHAR  |
+| created_at    | DATETIME |
+
+--------------------------------------------------------------------------------------
+# PHASE 8 — Invoice Module
+
+Branch
+
+feature/invoice-module
+
+Features
+
+* Generate Invoice
+* Download Invoice PDF
+* Invoice UUID
+* Seller details
+* Customer details
+* Product summary
+* Tax calculation
+
+Invoice Number Format
+(INV-Timestamp)
+text
+INV-2026-0001
+INV-2026-0002
+
+Invoice UUID Requirement
+
+python
+invoice_uuid = models.UUIDField(
+    default=uuid.uuid4,
+    editable=False
+)
+
+Tables
+
+#invoices
+
+| Field          | Type     |
+| invoice_uuid   | UUID     |
+| order_uuid     | UUID     |
+| invoice_number | VARCHAR  |
+| generated_at   | DATETIME |
+
+--------------------------------------------------------------------------------------
+# PHASE 9 — Wishlist Module
+
+Branch
+
+feature/wishlist-module
+
+Features
+
+* Add to wishlist
+* Remove wishlist
+* Move wishlist item to cart
+
+--------------------------------------------------------------------------------------
+# PHASE 10 — Review & Rating Module
+
+Branch
+
+feature/review-module
+
+Features
+
+* Product review
+* Star ratings
+* Review moderation
+* Verified purchase review
+
+--------------------------------------------------------------------------------------
+# PHASE 11 — Notification Module
+
+Branch
+
+feature/notification-module
+
+Features
+
+* Order updates
+* Product approval alerts
+* Low stock alerts
+* Admin notifications
+
+--------------------------------------------------------------------------------------
+# PHASE 12 — Admin Dashboard
+
+Branch
+
+feature/admin-dashboard
+
+Features
+
+* User analytics
+* Order analytics
+* Product analytics
+* Seller analytics
+* Revenue statistics
+* Charts using JavaScript
+
+--------------------------------------------------------------------------------------
+# PHASE 13 — UI Enhancement
+
+Branch
+
+feature/ui-enhancement
+
+Requirements
+
+* Fully responsive design
+* Mobile-first layout
+* Bootstrap cards
+* Toast notifications
+* Loading animations
+* Better dashboard UI
+
+--------------------------------------------------------------------------------------
+# Database Relationship Requirements
+
+# One-to-Many
+
+* One Seller → Many Products
+* One Customer → Many Orders
+* One Category → Many Products
+
+# Many-to-Many
+
+* Products ↔ Orders
+* Products ↔ Wishlist
+
+# Security Requirements
+
+Mandatory:
+
+* CSRF protection
+* Form validation
+* Login required decorators
+* Role-based route protection
+* Password hashing
+* Secure media uploads
+
+# UI Requirements
+
+Mandatory:
+
+* Bootstrap 5
+* Responsive design
+* Sidebar dashboards
+* Product cards
+* Modal forms
+* Toast alerts
+
+# Deliverables Per Phase
+
+Every phase must include:
+
+1. Git Branch
+
+Separate feature branch.
+
+2. README Update
+
+Mention:
+
+* Features completed
+* Commands used
+
+3. Commit History
+
+Example:
+
+git commit -m "Implemented Product SKU generation"
+git commit -m "Added seller dashboard"
+git commit -m "Resolved navbar merge conflict"
+
+# Final Expected Outcome
+
+The completed project should demonstrate:
+
+* Django Full Stack Development
+* Role-Based Authentication
+* UUID usage
+* SKU management
+* Git branching strategy
+* Merge conflict resolution
+* Modular architecture
+* Responsive UI
+* Real-world E-Commerce workflow
