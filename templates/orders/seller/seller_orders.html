@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Seller Orders - E-Commerce Application{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h4 class="fw-bold mb-4">📦 Orders Received</h4>
+
+    {% if orders %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Items (Mine)</th>
+                    <th>Order Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><code>{{ order.short_uuid }}</code></td>
+                    <td>{{ order.shipping_name }}<br><small class="text-muted">{{ order.shipping_phone }}</small></td>
+                    <td>
+                        {% for item in order.items.all %}
+                            {% if item.seller == request.user %}
+                                <div class="small">{{ item.product_name }} × {{ item.quantity }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="fw-bold text-success">₹{{ order.total_amount }}</td>
+                    <td>
+                        <span class="badge
+                            {% if order.order_status == 'delivered' %}bg-success
+                            {% elif order.order_status == 'cancelled' %}bg-danger
+                            {% elif order.order_status == 'shipped' %}bg-info text-dark
+                            {% elif order.order_status == 'processing' %}bg-warning text-dark
+                            {% elif order.order_status == 'confirmed' %}bg-primary
+                            {% else %}bg-secondary{% endif %}">
+                            {{ order.get_order_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ order.created_at|date:"d M Y" }}</td>
+                    <td>
+                        {% if order.order_status != 'cancelled' and order.order_status != 'delivered' %}
+                        <form method="POST" action="{% url 'update_order_status' order.order_uuid %}" class="d-flex gap-1">
+                            {% csrf_token %}
+                            <select name="order_status" class="form-select form-select-sm">
+                                <option value="confirmed"  {% if order.order_status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                <option value="processing" {% if order.order_status == 'processing' %}selected{% endif %}>Processing</option>
+                                <option value="shipped"    {% if order.order_status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                <option value="delivered"  {% if order.order_status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">✔</button>
+                        </form>
+                        {% else %}
+                            <span class="text-muted small">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="fs-5 text-muted">No orders received yet.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

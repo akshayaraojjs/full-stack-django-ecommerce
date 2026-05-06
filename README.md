@@ -86,3 +86,17 @@ Building Full Stack Django Ecommerce Application
   - `python manage.py startapp cart`
   - `python manage.py makemigrations cart`
   - `python manage.py migrate`
+
+### Phase 7: Order Management
+- **Branch**: `feature/order-management`
+- **Features Completed**:
+  - Created `orders` app with `Order` and `OrderItem` models.
+  - Implemented Checkout flow: captures shipping details, snapshots cart items to order items, deducts stock, and clears cart.
+  - **Customer side**: Order History list, Order Detail view, and Order Cancellation (for pending orders).
+  - **Seller side**: Dashboard view for "Orders Received", status update capability (Confirmed, Processing, Shipped, Delivered).
+  - **Stock Management**: Atomic transactions ensure stock is deducted on purchase and restored on cancellation.
+  - **Admin Integration**: Order management with inline item views and status filters in Django Admin.
+- **Commands Used**:
+  - `python manage.py startapp orders`
+  - `python manage.py makemigrations orders`
+  - `python manage.py migrate`
