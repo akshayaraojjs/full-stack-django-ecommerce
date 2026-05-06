@@ -1,2 +1,42 @@
 # full-stack-django-ecommerce
 Building Full Stack Django Ecommerce Application 
+
+## Project Tracking
+
+### Phase 1: Project Initialization
+- **Branch**: `feature/project-setup`
+- **Features Completed**:
+  - Initialized Git repository and branching strategy.
+  - Setup virtual environment and installed dependencies.
+  - Configured Django project (`ecommerce_project`) and MySQL database.
+  - Implemented base Bootstrap 5 template (`base.html`), navbar, and footer.
+- **Commands Used**:
+  - `django-admin startproject ecommerce_project .`
+  - `python manage.py migrate`
+
+### Phase 2: Authentication & Role-Based Login
+- **Branch**: `feature/authentication`
+- **Features Completed**:
+  - Created `accounts` app.
+  - Custom User model (`AbstractBaseUser`) with UUID primary keys and `role` (Admin, Customer, Seller).
+  - Configured `AUTH_USER_MODEL = 'accounts.User'`.
+  - Registration forms (Customer, Seller) and Login forms with Bootstrap styling.
+  - Login, Logout, and role-based redirects.
+  - Monkey-patched Django to support MariaDB 10.4.x (XAMPP).
+- **Commands Used**:
+  - `python manage.py startapp accounts`
+  - `python manage.py makemigrations accounts`
+  - `python manage.py migrate`
+
+### Phase 3: User Profile Management
+- **Branch**: `feature/user-management`
+- **Features Completed**:
+  - Created `UserProfile` model (OneToOne relationship with `User`).
+  - Added `post_save` signals to auto-create profiles on User creation.
+  - Created `UserUpdateForm` and `UserProfileForm`.
+  - Built `edit_profile` view for updating phone, address, and profile image.
+  - Designed interactive role-based dashboards (`admin.html`, `customer.html`, `seller.html`).
+  - Configured `MEDIA_URL` and `MEDIA_ROOT` for handling uploaded images.
+- **Commands Used**:
+  - `python manage.py makemigrations accounts`
+  - `python manage.py migrate`
