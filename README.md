@@ -54,3 +54,20 @@ Building Full Stack Django Ecommerce Application
   - `python manage.py startapp products`
   - `python manage.py makemigrations products`
   - `python manage.py migrate`
+
+### Bug Fixes (Post Phase 4)
+- **Branch**: `feature/search-filter`
+- **Fixes**:
+  - Fixed `RelatedObjectDoesNotExist` error on Edit Profile page by using `get_or_create` for `UserProfile`.
+  - Wired up Seller dashboard sidebar: **My Products** → `/products/seller/products/`, **Add Product** → `/products/seller/products/add/`.
+  - Wired up Admin dashboard sidebar: **Approve Products** → `/products/admin/products/`.
+
+### Phase 5: Product Listing & Search
+- **Branch**: `feature/search-filter`
+- **Features Completed**:
+  - Dynamic search by product name with 600ms debounce (live search on keyup).
+  - Filter by category (sidebar links).
+  - Filter by price range (min/max inputs).
+  - Sort by: Newest, Oldest, Price Low→High, Price High→Low.
+  - Pagination (9 products per page) with filter state preserved across pages.
+  - Active filter state shown in sidebar and toolbar.

@@ -56,9 +56,12 @@ def role_based_redirect(user):
 
 @login_required
 def edit_profile(request):
+    from .models import UserProfile
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = UserProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        p_form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
@@ -66,7 +69,7 @@ def edit_profile(request):
             return role_based_redirect(request.user)
     else:
         u_form = UserUpdateForm(instance=request.user)
-        p_form = UserProfileForm(instance=request.user.profile)
+        p_form = UserProfileForm(instance=profile)
         
     context = {
         'u_form': u_form,

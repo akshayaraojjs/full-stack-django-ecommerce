@@ -6,12 +6,60 @@ from .forms import ProductForm, ProductImageForm
 
 
 def product_list(request):
-    """Public product listing page — shows only approved products."""
+    """Public product listing with search, filter, sort, and pagination."""
+    from django.core.paginator import Paginator
+
     products = Product.objects.filter(status='approved').select_related('category', 'seller')
     categories = Category.objects.all()
+
+    # Search by name
+    query = request.GET.get('q', '').strip()
+    if query:
+        products = products.filter(product_name__icontains=query)
+
+    # Filter by category slug
+    cat_slug = request.GET.get('category', '')
+    if cat_slug:
+        products = products.filter(category__slug=cat_slug)
+
+    # Filter by price range
+    min_price = request.GET.get('min_price', '')
+    max_price = request.GET.get('max_price', '')
+    if min_price:
+        try:
+            products = products.filter(price__gte=float(min_price))
+        except ValueError:
+            pass
+    if max_price:
+        try:
+            products = products.filter(price__lte=float(max_price))
+        except ValueError:
+            pass
+
+    # Sort
+    sort = request.GET.get('sort', '')
+    sort_options = {
+        'price_asc': 'price',
+        'price_desc': '-price',
+        'newest': '-created_at',
+        'oldest': 'created_at',
+    }
+    products = products.order_by(sort_options.get(sort, '-created_at'))
+
+    # Pagination — 9 products per page
+    paginator = Paginator(products, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'products/product_list.html', {
-        'products': products,
+        'page_obj': page_obj,
+        'products': page_obj,
         'categories': categories,
+        'query': query,
+        'cat_slug': cat_slug,
+        'min_price': min_price,
+        'max_price': max_price,
+        'sort': sort,
     })
 
 
