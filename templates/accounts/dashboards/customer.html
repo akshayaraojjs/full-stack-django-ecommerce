@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard - E-Commerce Application{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                {% if user.profile.profile_image %}
+                    <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; font-size: 4rem;">
+                        {{ user.username|make_list|first|upper }}
+                    </div>
+                {% endif %}
+                <h5 class="card-title">{{ user.username }}</h5>
+                <p class="text-muted mb-1">{{ user.email }}</p>
+                <span class="badge bg-info text-dark">{{ user.role }}</span>
+            </div>
+            <div class="list-group list-group-flush border-top">
+                <a href="{% url 'edit_profile' %}" class="list-group-item list-group-item-action">Edit Profile</a>
+                <a href="#" class="list-group-item list-group-item-action">My Orders</a>
+                <a href="#" class="list-group-item list-group-item-action">Wishlist</a>
+                <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h4 class="mb-0">Dashboard Overview</h4>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-4">
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Total Orders</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Wishlist Items</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Reviews</small>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Contact Details</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">Phone:</dt>
+                    <dd class="col-sm-9">{{ user.profile.phone|default:"Not provided" }}</dd>
+
+                    <dt class="col-sm-3">Address:</dt>
+                    <dd class="col-sm-9">{{ user.profile.address|default:"Not provided" }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - E-Commerce Application{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm bg-dark text-white">
+            <div class="card-body text-center">
+                <div class="rounded-circle bg-light text-dark d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; font-size: 4rem;">
+                    A
+                </div>
+                <h5 class="card-title">{{ user.username }}</h5>
+                <p class="text-light mb-1">{{ user.email }}</p>
+                <span class="badge bg-danger">Administrator</span>
+            </div>
+            <div class="list-group list-group-flush border-top border-secondary">
+                <a href="{% url 'edit_profile' %}" class="list-group-item list-group-item-action bg-dark text-white border-secondary">Admin Settings</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary">Manage Users</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary">Approve Products</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white border-secondary">All Orders</a>
+                <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger bg-dark border-secondary">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h4 class="mb-0">System Overview</h4>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-4">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Total Customers</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Total Sellers</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Active Products</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border">
+                            <h3 class="mb-0">0</h3>
+                            <small class="text-muted">Pending Approvals</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    You have full administrative access. More analytics and charts will be available here soon.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
