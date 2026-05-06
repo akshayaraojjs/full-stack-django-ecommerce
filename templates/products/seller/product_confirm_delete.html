@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Product - Seller Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">Confirm Delete</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="fs-5">Are you sure you want to delete <strong>{{ product.product_name }}</strong>?</p>
+                <p class="text-muted">This action cannot be undone. All images associated with this product will also be removed.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <a href="{% url 'seller_product_list' %}" class="btn btn-secondary me-3">Cancel</a>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -40,3 +40,17 @@ Building Full Stack Django Ecommerce Application
 - **Commands Used**:
   - `python manage.py makemigrations accounts`
   - `python manage.py migrate`
+
+### Phase 4: Product Management
+- **Branch**: `feature/product-management`
+- **Features Completed**:
+  - Created `products` app with `Category`, `Product`, and `ProductImage` models.
+  - Auto-generated SKU using category prefix and count (e.g. `ELEC-0001`, `BOOK-0002`).
+  - Seller-side: Add, Edit, Delete product & upload multiple images.
+  - Admin-side: View all products, Approve or Block products.
+  - Public: Product listing page (approved only) and product detail page.
+  - Registered all models in Django Admin with inline image management.
+- **Commands Used**:
+  - `python manage.py startapp products`
+  - `python manage.py makemigrations products`
+  - `python manage.py migrate`
