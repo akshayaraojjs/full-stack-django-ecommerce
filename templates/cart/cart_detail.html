@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}My Cart - E-Commerce Application{% endblock %}
+
+{% block content %}
+<div class="row mt-4 g-4">
+
+    <!-- Cart Items -->
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0">🛒 My Cart</h4>
+            {% if cart.items.all %}
+                <a href="{% url 'clear_cart' %}" class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Clear entire cart?')">🗑 Clear Cart</a>
+            {% endif %}
+        </div>
+
+        {% if cart.items.all %}
+            {% for item in cart.items.all %}
+            <div class="card mb-3 shadow-sm border-0" id="cartItem-{{ item.pk }}">
+                <div class="card-body">
+                    <div class="row align-items-center g-3">
+                        <!-- Image -->
+                        <div class="col-auto">
+                            {% if item.product.primary_image %}
+                                <img src="{{ item.product.primary_image.url }}" alt="{{ item.product.product_name }}"
+                                     class="rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                     style="width: 80px; height: 80px; font-size: 2rem;">🖼</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Name & Price -->
+                        <div class="col">
+                            <h6 class="mb-1 fw-bold">
+                                <a href="{% url 'product_detail' item.product.pk %}" class="text-decoration-none text-dark">
+                                    {{ item.product.product_name }}
+                                </a>
+                            </h6>
+                            <small class="text-muted">₹{{ item.product.price }} each</small><br>
+                            <small class="text-muted">Stock available: {{ item.product.stock }}</small>
+                        </div>
+
+                        <!-- Quantity Controls -->
+                        <div class="col-auto">
+                            <form method="POST" action="{% url 'update_cart' item.pk %}" class="update-cart-form d-flex align-items-center gap-2">
+                                {% csrf_token %}
+                                <div class="input-group" style="max-width: 130px;">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm qty-decrease" data-target="qty-{{ item.pk }}">−</button>
+                                    <input type="number" name="quantity" id="qty-{{ item.pk }}"
+                                           value="{{ item.quantity }}" min="0" max="{{ item.product.stock }}"
+                                           class="form-control form-control-sm text-center qty-input">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm qty-increase" data-target="qty-{{ item.pk }}" data-max="{{ item.product.stock }}">+</button>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </form>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="col-auto text-end">
+                            <strong class="text-success fs-6" id="subtotal-{{ item.pk }}">₹{{ item.subtotal }}</strong>
+                            <br>
+                            <a href="{% url 'remove_from_cart' item.pk %}" class="text-danger small">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="text-center py-5">
+                <p class="fs-4 text-muted">Your cart is empty 🛒</p>
+                <a href="{% url 'product_list' %}" class="btn btn-primary mt-2">Shop Now</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Order Summary -->
+    {% if cart.items.all %}
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 sticky-top" style="top: 80px;">
+            <div class="card-header bg-dark text-white fw-bold fs-5">Order Summary</div>
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        {% for item in cart.items.all %}
+                        <tr>
+                            <td class="text-muted small">{{ item.product.product_name|truncatewords:4 }} × {{ item.quantity }}</td>
+                            <td class="text-end small">₹{{ item.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="border-top">
+                        <tr>
+                            <th class="fs-5">Total</th>
+                            <th class="text-end fs-5 text-success" id="cartTotal">₹{{ cart.total_price }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="card-footer bg-white">
+                <a href="#" class="btn btn-success w-100 fw-bold">Proceed to Checkout →</a>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-secondary w-100 mt-2">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Quantity +/- buttons
+    document.querySelectorAll('.qty-decrease').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.target);
+            if (parseInt(input.value) > 0) input.value = parseInt(input.value) - 1;
+        });
+    });
+    document.querySelectorAll('.qty-increase').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.target);
+            const max = parseInt(btn.dataset.max);
+            if (parseInt(input.value) < max) input.value = parseInt(input.value) + 1;
+        });
+    });
+</script>
+{% endblock %}

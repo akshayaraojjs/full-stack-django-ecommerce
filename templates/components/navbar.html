@@ -1,15 +1,32 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="/">E-Commerce</a>
+        <a class="navbar-brand fw-bold" href="/">🛒 E-Commerce</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center">
                 {% if user.is_authenticated %}
+                <!-- Cart Icon -->
+                <li class="nav-item me-2">
+                    <a class="nav-link position-relative" href="{% url 'cart_detail' %}">
+                        🛒
+                        {% if user.cart.total_items %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-badge">
+                                {{ user.cart.total_items }}
+                            </span>
+                        {% endif %}
+                    </a>
+                </li>
+                <!-- User Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                         {{ user.username }}
@@ -24,8 +41,9 @@
                             <a class="dropdown-item" href="{% url 'customer_dashboard' %}">Dashboard</a>
                             {% endif %}
                         </li>
+                        <li><a class="dropdown-item" href="{% url 'cart_detail' %}">My Cart</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 </li>
                 {% else %}
@@ -33,7 +51,7 @@
                     <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_customer' %}">Register</a>
+                    <a class="nav-link btn btn-outline-light btn-sm px-3 ms-1" href="{% url 'register_customer' %}">Register</a>
                 </li>
                 {% endif %}
             </ul>

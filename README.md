@@ -71,3 +71,18 @@ Building Full Stack Django Ecommerce Application
   - Sort by: Newest, Oldest, Price Low→High, Price High→Low.
   - Pagination (9 products per page) with filter state preserved across pages.
   - Active filter state shown in sidebar and toolbar.
+
+### Phase 6: Shopping Cart Module
+- **Branch**: `feature/cart-module`
+- **Features Completed**:
+  - Created `cart` app with `Cart` (OneToOne with User) and `CartItem` models.
+  - Add to cart from product detail with quantity picker (respects stock limits).
+  - Update quantity (+ / − buttons) per cart item.
+  - Remove individual items and clear entire cart.
+  - Order summary sidebar with live subtotal per item and cart total.
+  - Navbar cart icon with item count badge.
+  - AJAX-ready endpoints (`add_to_cart`, `update_cart`) returning JSON responses.
+- **Commands Used**:
+  - `python manage.py startapp cart`
+  - `python manage.py makemigrations cart`
+  - `python manage.py migrate`
