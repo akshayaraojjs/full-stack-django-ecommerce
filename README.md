@@ -122,3 +122,12 @@ Building Full Stack Django Ecommerce Application
 5. **Run Migrations**: `python manage.py migrate`
 6. **Create Admin**: `python manage.py createsuperuser`
 7. **Run Server**: `python manage.py run dev`
+
+---
+
+## 🧪 Testing & Seed Data
+- To seed the database with 10 categories and 50 approved products for testing:
+  - `pip install faker`
+  - `python manage.py seed_data`
+  - *Note*: If no seller exists, the script will create one with credentials `testseller` / `password123`.
+
