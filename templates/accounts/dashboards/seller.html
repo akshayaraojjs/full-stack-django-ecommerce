@@ -63,8 +63,14 @@
                     </div>
                 </div>
 
-                <h5 class="mb-3">Store Contact Info</h5>
+                <h5 class="mb-3">Business & Contact Info</h5>
                 <dl class="row">
+                    <dt class="col-sm-3">Business Name:</dt>
+                    <dd class="col-sm-9 text-primary fw-bold">{{ user.profile.business_name|default:"Not provided" }}</dd>
+
+                    <dt class="col-sm-3">GST Number:</dt>
+                    <dd class="col-sm-9"><code>{{ user.profile.gst_number|default:"Not provided" }}</code></dd>
+
                     <dt class="col-sm-3">Business Phone:</dt>
                     <dd class="col-sm-9">{{ user.profile.phone|default:"Not provided" }}</dd>
 

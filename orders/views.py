@@ -152,3 +152,42 @@ def update_order_status(request, order_uuid):
         else:
             messages.error(request, 'Invalid status.')
     return redirect('seller_orders')
+
+@login_required
+def generate_invoice(request, order_uuid, invoice_type):
+    """
+    Generate an invoice for an order.
+    invoice_type: 'gst' or 'non-gst'
+    """
+    order = get_object_or_404(Order, order_uuid=order_uuid)
+    
+    # Check permission: User must be the customer or a seller of an item in this order
+    items = order.items.all()
+    
+    if request.user.role == 'Seller':
+        # Seller only sees their own items
+        items = items.filter(seller=request.user)
+        if not items.exists():
+            messages.error(request, "You don't have items in this order.")
+            return redirect('seller_orders')
+        seller = request.user
+    else:
+        # Customer sees all items
+        if order.customer != request.user:
+            messages.error(request, "Unauthorized.")
+            return redirect('order_history')
+        # For customer view, use the first seller as primary info or a generic header
+        seller = items.first().seller if items.exists() else None
+
+    total_amount = sum(item.subtotal for item in items)
+    tax_amount = round(float(total_amount) * 0.18, 2) if invoice_type == 'gst' else 0
+    
+    context = {
+        'order': order,
+        'items': items,
+        'seller': seller,
+        'invoice_type': invoice_type,
+        'total_amount': total_amount,
+        'tax_amount': tax_amount,
+    }
+    return render(request, 'orders/invoice_detail.html', context)

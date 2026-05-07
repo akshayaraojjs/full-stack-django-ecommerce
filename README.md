@@ -119,6 +119,15 @@ Building Full Stack Django Ecommerce Application
   - **Smart Placeholders**: Implemented an external CDN-based placeholder system to ensure all products show an image, even if none is uploaded.
   - **Bug Fixes**: Resolved `RelatedObjectDoesNotExist` errors by protecting Cart access and ensuring `UserProfile` auto-creation.
 
+### Phase 10: Advanced Seller Profiles & Invoicing
+- **Branch**: `feature/invoicing-seller-details`
+- **Features Completed**:
+  - **Enhanced Profiles**: Added GST Number and Business Name fields to Seller profiles.
+  - **Company Branding**: Sellers can now upload their Company Logo (via profile image) and Store Address to be used in invoices.
+  - **GST Invoicing**: Implemented a dynamic invoice generation system with GST (18%) and Non-GST variants.
+  - **Preview & Print**: Created a premium, print-friendly HTML invoice template that customers and sellers can preview and "Print to PDF".
+  - **Role-Based Access**: Customers can download invoices for delivered orders, and Sellers can generate them specifically for their products.
+
 ---
 
 ## 🚀 Deployment Instructions

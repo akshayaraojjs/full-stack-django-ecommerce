@@ -51,7 +51,7 @@ from .models import UserProfile
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['phone', 'address', 'profile_image']
+        fields = ['business_name', 'gst_number', 'phone', 'address', 'profile_image']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -69,6 +69,17 @@
                             </button>
                         </form>
                     {% endif %}
+                    {% if order.order_status == 'delivered' %}
+                        <div class="card bg-light border-0 mb-3">
+                            <div class="card-body p-2 text-center">
+                                <small class="text-muted d-block mb-2">📄 Download Invoice</small>
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'generate_invoice' order.order_uuid 'non-gst' %}" target="_blank" class="btn btn-sm btn-dark">Without GST</a>
+                                    <a href="{% url 'generate_invoice' order.order_uuid 'gst' %}" target="_blank" class="btn btn-sm btn-outline-success">With GST (18%)</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                     <a href="{% url 'order_history' %}" class="btn btn-outline-secondary">← My Orders</a>
                 </div>
             </div>

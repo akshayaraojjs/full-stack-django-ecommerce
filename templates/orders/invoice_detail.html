@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Invoice #{{ order.short_uuid }} - E-Commerce Application{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        .navbar, .btn-group, .no-print { display: none !important; }
+        .container { width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+        .card { border: none !important; box-shadow: none !important; }
+        body { background: white !important; }
+    }
+    .invoice-box {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        background: #fff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <h2 class="fw-bold">Invoice Preview</h2>
+        <div class="btn-group">
+            <button onclick="window.print();" class="btn btn-primary">🖨️ Print / Download PDF</button>
+            <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-outline-secondary">Back</a>
+        </div>
+    </div>
+
+    <div class="invoice-box shadow-sm card">
+        <div class="row mb-4">
+            <div class="col-6">
+                {% if seller.profile.profile_image %}
+                    <img src="{{ seller.profile.profile_image.url }}" alt="Logo" style="max-height: 80px;" class="mb-3">
+                {% else %}
+                    <h3 class="text-primary fw-bold">🛒 E-Commerce</h3>
+                {% endif %}
+                <h5 class="fw-bold">{{ seller.profile.business_name|default:seller.username }}</h5>
+                <p class="small text-muted mb-0">
+                    {{ seller.profile.address|linebreaksbr }}<br>
+                    Phone: {{ seller.profile.phone }}<br>
+                    {% if invoice_type == 'gst' and seller.profile.gst_number %}
+                        <strong>GSTIN: {{ seller.profile.gst_number }}</strong>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-6 text-end">
+                <h1 class="display-6 text-muted">INVOICE</h1>
+                <p class="mb-0"><strong>Invoice #:</strong> {{ order.short_uuid }}</p>
+                <p class="mb-0"><strong>Date:</strong> {{ order.created_at|date:"d M Y" }}</p>
+                <p class="mb-0"><strong>Status:</strong> <span class="text-uppercase">{{ order.order_status }}</span></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row mb-4">
+            <div class="col-6">
+                <h6 class="fw-bold text-muted">BILL TO:</h6>
+                <p class="mb-0"><strong>{{ order.shipping_name }}</strong></p>
+                <p class="small text-muted">
+                    {{ order.shipping_address|linebreaksbr }}<br>
+                    Phone: {{ order.shipping_phone }}
+                </p>
+            </div>
+        </div>
+
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Item Description</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <span class="fw-bold">{{ item.product_name }}</span><br>
+                        <small class="text-muted">SKU: {{ item.sku }}</small>
+                    </td>
+                    <td class="text-center">₹{{ item.price }}</td>
+                    <td class="text-center">{{ item.quantity }}</td>
+                    <td class="text-end">₹{{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Subtotal</td>
+                    <td class="text-end">₹{{ total_amount }}</td>
+                </tr>
+                {% if invoice_type == 'gst' %}
+                <tr>
+                    <td colspan="3" class="text-end small">GST (18% Included)</td>
+                    <td class="text-end small">₹{{ tax_amount }}</td>
+                </tr>
+                {% endif %}
+                <tr class="table-primary fw-bold">
+                    <td colspan="3" class="text-end fs-5">Grand Total</td>
+                    <td class="text-end fs-5">₹{{ total_amount }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="mt-5 text-center small text-muted">
+            <p>Thank you for your business!<br>This is a computer-generated invoice.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

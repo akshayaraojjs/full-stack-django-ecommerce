@@ -68,7 +68,15 @@
                             <button type="submit" class="btn btn-sm btn-primary">✔</button>
                         </form>
                         {% elif order.order_status == 'delivered' %}
-                            <span class="badge bg-success opacity-75">Completed</span>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
+                                    📄 Invoice
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{% url 'generate_invoice' order.order_uuid 'non-gst' %}" target="_blank">Without GST</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'generate_invoice' order.order_uuid 'gst' %}" target="_blank">With GST (18%)</a></li>
+                                </ul>
+                            </div>
                         {% else %}
                             <span class="text-muted small">—</span>
                         {% endif %}

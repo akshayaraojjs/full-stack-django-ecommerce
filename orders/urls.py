@@ -8,6 +8,7 @@ urlpatterns = [
     path('history/', views.order_history, name='order_history'),
     path('<uuid:order_uuid>/', views.order_detail, name='order_detail'),
     path('<uuid:order_uuid>/cancel/', views.cancel_order, name='cancel_order'),
+    path('<uuid:order_uuid>/invoice/<str:invoice_type>/', views.generate_invoice, name='generate_invoice'),
 
     # Seller
     path('seller/', views.seller_orders, name='seller_orders'),
