@@ -34,17 +34,17 @@
     <div class="invoice-box shadow-sm card mb-5" style="page-break-after: always;">
         <div class="row mb-4">
             <div class="col-6">
-                {% if group.seller.profile.profile_image %}
-                    <img src="{{ group.seller.profile.profile_image.url }}" alt="Logo" style="max-height: 80px;" class="mb-3">
+                {% if group.profile and group.profile.profile_image %}
+                    <img src="{{ group.profile.profile_image.url }}" alt="Logo" style="max-height: 80px;" class="mb-3">
                 {% else %}
                     <h3 class="text-primary fw-bold">🛒 E-Commerce</h3>
                 {% endif %}
-                <h5 class="fw-bold">{{ group.seller.profile.business_name|default:group.seller.username }}</h5>
+                <h5 class="fw-bold">{{ group.profile.business_name|default:group.seller.username }}</h5>
                 <p class="small text-muted mb-0">
-                    {{ group.seller.profile.address|linebreaksbr }}<br>
-                    Phone: {{ group.seller.profile.phone }}<br>
-                    {% if invoice_type == 'gst' and group.seller.profile.gst_number %}
-                        <strong>GSTIN: {{ group.seller.profile.gst_number }}</strong>
+                    {{ group.profile.address|linebreaksbr }}<br>
+                    Phone: {{ group.profile.phone }}<br>
+                    {% if invoice_type == 'gst' and group.profile.gst_number %}
+                        <strong>GSTIN: {{ group.profile.gst_number }}</strong>
                     {% endif %}
                 </p>
             </div>

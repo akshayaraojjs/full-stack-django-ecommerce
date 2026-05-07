@@ -165,15 +165,30 @@ def generate_invoice(request, order_uuid, invoice_type):
         all_items = all_items.filter(seller=request.user)
         if not all_items.exists():
             messages.error(request, "Access denied.")
-            return redirect('seller_orders')
+            return redirect('seller_dashboard')
+    elif request.user.role == 'Customer':
+        # Customer can only see their own orders
+        if order.customer != request.user:
+            messages.error(request, "Access denied.")
+            return redirect('order_history')
+    elif not request.user.is_staff:
+        # Prevent other roles (if any) from accessing
+        return redirect('home')
 
     # Group items by seller
     seller_groups = {}
     for item in all_items:
         seller_id = item.seller.id
         if seller_id not in seller_groups:
+            # Safely get profile info
+            try:
+                profile = item.seller.profile
+            except:
+                profile = None
+
             seller_groups[seller_id] = {
                 'seller': item.seller,
+                'profile': profile,
                 'items': [],
                 'subtotal': 0
             }
