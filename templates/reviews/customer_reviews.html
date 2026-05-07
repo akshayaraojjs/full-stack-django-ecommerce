@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}My Reviews - E-Commerce Application{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h4 class="fw-bold mb-4">⭐ My Reviews</h4>
+
+    {% if reviews %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for review in reviews %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        {% if review.product.primary_image %}
+                            <img src="{{ review.product.primary_image.url }}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                        {% endif %}
+                        <div>
+                            <h6 class="fw-bold mb-0">{{ review.product.product_name }}</h6>
+                            <span class="badge bg-success">{{ review.rating }} ⭐</span>
+                            <small class="text-muted ms-2">{{ review.created_at|date:"d M Y" }}</small>
+                        </div>
+                    </div>
+                    <p class="text-dark mb-3">{{ review.comment }}</p>
+                    <a href="{% url 'product_detail' review.product.pk %}" class="btn btn-sm btn-outline-dark">View Product</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="fs-4 text-muted">You haven't reviewed any products yet ⭐</p>
+            <a href="{% url 'order_history' %}" class="btn btn-primary mt-2">Check Your Orders</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

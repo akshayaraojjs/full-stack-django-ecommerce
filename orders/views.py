@@ -178,7 +178,7 @@ def generate_invoice(request, order_uuid, invoice_type):
     # Group items by seller
     seller_groups = {}
     for item in all_items:
-        seller_id = item.seller.id
+        seller_id = item.seller.pk
         if seller_id not in seller_groups:
             # Safely get profile info
             try:

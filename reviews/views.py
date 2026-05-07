@@ -36,3 +36,11 @@ def add_review(request, product_id):
             messages.success(request, "Your review has been updated!")
             
     return redirect('product_detail', pk=product.id)
+
+@login_required
+def customer_reviews(request):
+    """Show all reviews given by the current customer."""
+    if request.user.role != 'Customer':
+        return redirect('home')
+    reviews = Review.objects.filter(user=request.user).select_related('product')
+    return render(request, 'reviews/customer_reviews.html', {'reviews': reviews})
