@@ -56,8 +56,9 @@ class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            if field.widget.input_type != 'file':
-                field.widget.attrs['class'] = 'form-control'
-            else:
+            # Check if it's a file input specifically, as Textarea doesn't have input_type
+            if isinstance(field.widget, forms.ClearableFileInput):
                 field.widget.attrs['class'] = 'form-control-file'
+            else:
+                field.widget.attrs['class'] = 'form-control'
 
