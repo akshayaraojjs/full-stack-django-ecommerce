@@ -1,6 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top no-print bg-dark">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">🛒 E-Commerce</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+            <i class="bi bi-bag-check-fill fs-4 text-primary"></i>
+            <span>Multi<span class="text-primary">Vendor</span></span>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
