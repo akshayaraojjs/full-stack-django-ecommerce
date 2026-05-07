@@ -35,21 +35,30 @@
             <div class="card-body">
                 <div class="row text-center mb-4">
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <h3 class="mb-0">0</h3>
+                        <div class="p-3 bg-light rounded border border-primary">
+                            <h3 class="mb-0 fw-bold">{{ total_products }}</h3>
                             <small class="text-muted">Total Products</small>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <h3 class="mb-0">0</h3>
+                        <div class="p-3 bg-light rounded border border-warning">
+                            <h3 class="mb-0 fw-bold">{{ pending_orders }}</h3>
                             <small class="text-muted">Pending Orders</small>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <h3 class="mb-0">$0.00</h3>
+                        <div class="p-3 bg-light rounded border border-success">
+                            <h3 class="mb-0 fw-bold">₹{{ total_earnings }}</h3>
                             <small class="text-muted">Total Earnings</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <h5 class="mb-3">Sales Insights (Top Products)</h5>
+                        <div style="height: 300px;">
+                            <canvas id="sellerChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -66,4 +75,35 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('sellerChart').getContext('2d');
+    const sellerChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart_labels|safe }},
+            datasets: [{
+                label: 'Quantity Sold',
+                data: {{ chart_data|safe }},
+                backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                borderColor: 'rgba(37, 99, 235, 1)',
+                borderWidth: 1,
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: True,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

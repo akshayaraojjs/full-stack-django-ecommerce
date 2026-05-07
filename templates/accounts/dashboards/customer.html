@@ -34,21 +34,30 @@
             <div class="card-body">
                 <div class="row text-center mb-4">
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <h3 class="mb-0">0</h3>
+                        <div class="p-3 bg-light rounded border border-primary">
+                            <h3 class="mb-0 fw-bold">{{ total_orders }}</h3>
                             <small class="text-muted">Total Orders</small>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <h3 class="mb-0">0</h3>
-                            <small class="text-muted">Wishlist Items</small>
+                        <div class="p-3 bg-light rounded border border-info">
+                            <h3 class="mb-0 fw-bold">₹{{ total_spent }}</h3>
+                            <small class="text-muted">Total Spent</small>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <h3 class="mb-0">0</h3>
-                            <small class="text-muted">Reviews</small>
+                        <div class="p-3 bg-light rounded border border-success">
+                            <h3 class="mb-0 fw-bold">{{ cart_items }}</h3>
+                            <small class="text-muted">Items in Cart</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <h5 class="mb-3">Spending History (Last 5 Orders)</h5>
+                        <div style="height: 300px;">
+                            <canvas id="customerChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -65,4 +74,37 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('customerChart').getContext('2d');
+    const customerChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels|safe }},
+            datasets: [{
+                label: 'Order Amount (₹)',
+                data: {{ chart_data|safe }},
+                borderColor: 'rgba(37, 99, 235, 1)',
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointBackgroundColor: 'rgba(37, 99, 235, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { callback: function(value) { return '₹' + value; } }
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

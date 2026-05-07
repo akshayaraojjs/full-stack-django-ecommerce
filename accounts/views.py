@@ -88,10 +88,62 @@ def admin_dashboard(request):
 def customer_dashboard(request):
     if request.user.role != 'Customer':
         return redirect('home')
-    return render(request, 'accounts/dashboards/customer.html')
+    
+    from orders.models import Order
+    from cart.models import Cart
+    
+    orders = Order.objects.filter(customer=request.user)
+    total_orders = orders.count()
+    total_spent = sum(o.total_amount for o in orders if o.order_status != 'cancelled')
+    
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.count()
+    
+    # Simple stats for Chart.js (last 5 orders)
+    recent_orders = orders.order_by('-created_at')[:5]
+    chart_labels = [o.created_at.strftime('%d %b') for o in reversed(recent_orders)]
+    chart_data = [float(o.total_amount) for o in reversed(recent_orders)]
+    
+    context = {
+        'total_orders': total_orders,
+        'total_spent': total_spent,
+        'cart_items': cart_items,
+        'chart_labels': chart_labels,
+        'chart_data': chart_data,
+    }
+    return render(request, 'accounts/dashboards/customer.html', context)
 
 @login_required
 def seller_dashboard(request):
     if request.user.role != 'Seller':
         return redirect('home')
-    return render(request, 'accounts/dashboards/seller.html')
+    
+    from products.models import Product
+    from orders.models import OrderItem, Order
+    
+    my_products = Product.objects.filter(seller=request.user)
+    total_products = my_products.count()
+    
+    # Orders containing this seller's products
+    my_order_items = OrderItem.objects.filter(seller=request.user)
+    # Get distinct orders from these items
+    order_ids = my_order_items.values_list('order_id', flat=True).distinct()
+    my_orders = Order.objects.filter(order_uuid__in=order_ids)
+    
+    pending_orders = my_orders.filter(order_status='pending').count()
+    total_earnings = sum(item.subtotal for item in my_order_items if item.order.order_status != 'cancelled')
+    
+    # Stats for Chart.js (Earnings per product - Top 5)
+    from django.db.models import Sum
+    top_products = my_order_items.values('product_name').annotate(total_sales=Sum('quantity')).order_by('-total_sales')[:5]
+    chart_labels = [p['product_name'] for p in top_products]
+    chart_data = [p['total_sales'] for p in top_products]
+    
+    context = {
+        'total_products': total_products,
+        'pending_orders': pending_orders,
+        'total_earnings': total_earnings,
+        'chart_labels': chart_labels,
+        'chart_data': chart_data,
+    }
+    return render(request, 'accounts/dashboards/seller.html', context)

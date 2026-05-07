@@ -9,9 +9,7 @@
         {% if product.primary_image %}
             <img src="{{ product.primary_image.url }}" class="img-fluid rounded shadow" alt="{{ product.product_name }}">
         {% else %}
-            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 380px;">
-                <span class="text-muted fs-5">No Image Available</span>
-            </div>
+            <img src="https://placehold.co/600x600/e2e8f0/1e293b?text={{ product.product_name|urlencode }}" class="img-fluid rounded shadow" alt="{{ product.product_name }}">
         {% endif %}
         <!-- Thumbnail strip -->
         {% if product.images.count > 1 %}
@@ -53,7 +51,7 @@
         </div>
 
         <!-- Add to Cart Form -->
-        {% if user.is_authenticated and product.stock > 0 %}
+        {% if user.is_authenticated and user.role == 'Customer' and product.stock > 0 %}
         <form method="POST" action="{% url 'add_to_cart' product.pk %}" id="addToCartForm">
             {% csrf_token %}
             <div class="d-flex align-items-center gap-3 mb-3">
@@ -69,6 +67,8 @@
                 <a href="{% url 'cart_detail' %}" class="btn btn-outline-secondary">View Cart</a>
             </div>
         </form>
+        {% elif user.role == 'Seller' %}
+            <div class="alert alert-info py-2">Sellers cannot purchase products.</div>
         {% elif not user.is_authenticated %}
             <a href="{% url 'login' %}" class="btn btn-primary px-5">Login to Add to Cart</a>
         {% else %}

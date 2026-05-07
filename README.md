@@ -110,6 +110,15 @@ Building Full Stack Django Ecommerce Application
   - **Responsiveness**: Ensured all pages (Cart, Checkout, Dashboards) use Bootstrap's grid for mobile-friendly layouts.
   - **Final Consolidation**: Merged all feature branches into `development` and then into `main`.
 
+### Phase 9: Analytics & UI Polish
+- **Branch**: `feature/analytics-polish`
+- **Features Completed**:
+  - **Dashboard Analytics**: Integrated Chart.js to provide visual insights (Sales per product for Sellers, Spending history for Customers).
+  - **Dynamic Metrics**: Implemented real-time counts for Total Orders, Earnings, and Cart items on dashboards.
+  - **Role-Based UI**: Restricted "Add to Cart" functionality and Cart Navbar links to Customers only, preventing errors for Sellers/Admins.
+  - **Smart Placeholders**: Implemented an external CDN-based placeholder system to ensure all products show an image, even if none is uploaded.
+  - **Bug Fixes**: Resolved `RelatedObjectDoesNotExist` errors by protecting Cart access and ensuring `UserProfile` auto-creation.
+
 ---
 
 ## 🚀 Deployment Instructions
