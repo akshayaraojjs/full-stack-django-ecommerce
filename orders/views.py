@@ -155,39 +155,45 @@ def update_order_status(request, order_uuid):
 
 @login_required
 def generate_invoice(request, order_uuid, invoice_type):
-    """
-    Generate an invoice for an order.
-    invoice_type: 'gst' or 'non-gst'
-    """
     order = get_object_or_404(Order, order_uuid=order_uuid)
     
-    # Check permission: User must be the customer or a seller of an item in this order
-    items = order.items.all()
+    # Base items query
+    all_items = order.items.all().select_related('seller', 'seller__profile')
     
     if request.user.role == 'Seller':
         # Seller only sees their own items
-        items = items.filter(seller=request.user)
-        if not items.exists():
-            messages.error(request, "You don't have items in this order.")
+        all_items = all_items.filter(seller=request.user)
+        if not all_items.exists():
+            messages.error(request, "Access denied.")
             return redirect('seller_orders')
-        seller = request.user
-    else:
-        # Customer sees all items
-        if order.customer != request.user:
-            messages.error(request, "Unauthorized.")
-            return redirect('order_history')
-        # For customer view, use the first seller as primary info or a generic header
-        seller = items.first().seller if items.exists() else None
 
-    total_amount = sum(item.subtotal for item in items)
-    tax_amount = round(float(total_amount) * 0.18, 2) if invoice_type == 'gst' else 0
-    
+    # Group items by seller
+    seller_groups = {}
+    for item in all_items:
+        seller_id = item.seller.id
+        if seller_id not in seller_groups:
+            seller_groups[seller_id] = {
+                'seller': item.seller,
+                'items': [],
+                'subtotal': 0
+            }
+        seller_groups[seller_id]['items'].append(item)
+        seller_groups[seller_id]['subtotal'] += item.subtotal
+
+    # Calculate tax and total for each group
+    for gid in seller_groups:
+        group = seller_groups[gid]
+        subtotal = float(group['subtotal'])
+        if invoice_type == 'gst':
+            group['tax_amount'] = round(subtotal * 0.18, 2)
+            group['grand_total'] = round(subtotal + group['tax_amount'], 2)
+        else:
+            group['tax_amount'] = 0
+            group['grand_total'] = round(subtotal, 2)
+
     context = {
         'order': order,
-        'items': items,
-        'seller': seller,
+        'seller_groups': seller_groups.values(),
         'invoice_type': invoice_type,
-        'total_amount': total_amount,
-        'tax_amount': tax_amount,
     }
     return render(request, 'orders/invoice_detail.html', context)

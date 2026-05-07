@@ -61,8 +61,18 @@ class Product(models.Model):
 
     @property
     def primary_image(self):
-        img = self.images.first()
+        img = self.images.filter(is_primary=True).first() or self.images.first()
         return img.image if img else None
+
+    @property
+    def average_rating(self):
+        from django.db.models import Avg
+        avg = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg, 1) if avg else 0
+
+    @property
+    def review_count(self):
+        return self.reviews.count()
 
 
 class ProductImage(models.Model):

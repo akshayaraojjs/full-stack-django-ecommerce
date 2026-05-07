@@ -51,6 +51,13 @@ def product_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Wishlist context
+    wishlisted_product_ids = []
+    if request.user.is_authenticated and request.user.role == 'Customer':
+        from wishlist.models import Wishlist
+        wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+        wishlisted_product_ids = wishlist.products.values_list('id', flat=True)
+
     return render(request, 'products/product_list.html', {
         'page_obj': page_obj,
         'products': page_obj,
@@ -60,13 +67,24 @@ def product_list(request):
         'min_price': min_price,
         'max_price': max_price,
         'sort': sort,
+        'wishlisted_product_ids': wishlisted_product_ids,
     })
 
 
 def product_detail(request, pk):
     """Public product detail page."""
     product = get_object_or_404(Product, pk=pk, status='approved')
-    return render(request, 'products/product_detail.html', {'product': product})
+    
+    is_wishlisted = False
+    if request.user.is_authenticated and request.user.role == 'Customer':
+        from wishlist.models import Wishlist
+        wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+        is_wishlisted = wishlist.products.filter(id=product.id).exists()
+
+    return render(request, 'products/product_detail.html', {
+        'product': product,
+        'is_wishlisted': is_wishlisted
+    })
 
 
 # ─── Seller Views ─────────────────────────────────────────────────────────────

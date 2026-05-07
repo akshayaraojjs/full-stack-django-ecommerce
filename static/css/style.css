@@ -20,6 +20,8 @@ body {
     backdrop-filter: blur(10px);
     background-color: rgba(30, 41, 59, 0.95) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1030;
 }
 
 .navbar-brand {
@@ -27,15 +29,20 @@ body {
     letter-spacing: -0.5px;
 }
 
+.navbar .dropdown-menu {
+    position: absolute;
+    z-index: 1055;
+}
+
 /* Card Hover Lift Effect */
 .card {
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 24px -10px rgba(0,0,0,0.15);
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.15);
 }
 
 /* Button Refinement */
@@ -66,7 +73,7 @@ body {
 
 .list-group-item:hover {
     z-index: 10;
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .text-danger.list-group-item {
@@ -103,23 +110,70 @@ main {
 ::-webkit-scrollbar {
     width: 8px;
 }
+
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
+
 ::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
 }
 
 /* Animation Utilities */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-main > .row, main > div {
+main>.row,
+main>div {
     animation: fadeIn 0.5s ease forwards;
 }
+
+/* Wishlist Button Styling */
+.wishlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.1);
+    background: #fff;
+}
+
+.wishlist-btn i {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.wishlist-btn .bi-heart {
+    color: #64748b;
+}
+
+.wishlist-btn .bi-heart-fill {
+    color: #ef4444;
+}

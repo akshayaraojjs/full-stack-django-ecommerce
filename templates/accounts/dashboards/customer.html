@@ -8,11 +8,13 @@
         <div class="card shadow-sm">
             <div class="card-body text-center">
                 {% if user.profile.profile_image %}
-                    <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="rounded-circle img-thumbnail mb-3"
+                    style="width: 150px; height: 150px; object-fit: cover;">
                 {% else %}
-                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; font-size: 4rem;">
-                        {{ user.username|make_list|first|upper }}
-                    </div>
+                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                    style="width: 150px; height: 150px; font-size: 4rem;">
+                    {{ user.username|make_list|first|upper }}
+                </div>
                 {% endif %}
                 <h5 class="card-title">{{ user.username }}</h5>
                 <p class="text-muted mb-1">{{ user.email }}</p>
@@ -21,7 +23,7 @@
             <div class="list-group list-group-flush border-top">
                 <a href="{% url 'edit_profile' %}" class="list-group-item list-group-item-action">Edit Profile</a>
                 <a href="{% url 'order_history' %}" class="list-group-item list-group-item-action">My Orders</a>
-                <a href="#" class="list-group-item list-group-item-action">Wishlist</a>
+                <a href="{% url 'wishlist_detail' %}" class="list-group-item list-group-item-action">Wishlist</a>
                 <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
             </div>
         </div>
@@ -83,28 +85,28 @@
     const customerChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{ chart_labels|safe }},
-            datasets: [{
-                label: 'Order Amount (₹)',
-                data: {{ chart_data|safe }},
-                borderColor: 'rgba(37, 99, 235, 1)',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 5,
-                pointBackgroundColor: 'rgba(37, 99, 235, 1)'
+            labels: {{ chart_labels| safe }},
+    datasets: [{
+        label: 'Order Amount (₹)',
+        data: {{ chart_data| safe }},
+        borderColor: 'rgba(37, 99, 235, 1)',
+        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5,
+        pointBackgroundColor: 'rgba(37, 99, 235, 1)'
             }]
         },
-        options: {
-            responsive: true,
+    options: {
+        responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
+                scales: {
+            y: {
+                beginAtZero: true,
                     ticks: { callback: function(value) { return '₹' + value; } }
-                }
             }
         }
+    }
     });
 </script>
 {% endblock %}

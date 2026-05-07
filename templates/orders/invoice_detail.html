@@ -30,20 +30,21 @@
         </div>
     </div>
 
-    <div class="invoice-box shadow-sm card">
+    {% for group in seller_groups %}
+    <div class="invoice-box shadow-sm card mb-5" style="page-break-after: always;">
         <div class="row mb-4">
             <div class="col-6">
-                {% if seller.profile.profile_image %}
-                    <img src="{{ seller.profile.profile_image.url }}" alt="Logo" style="max-height: 80px;" class="mb-3">
+                {% if group.seller.profile.profile_image %}
+                    <img src="{{ group.seller.profile.profile_image.url }}" alt="Logo" style="max-height: 80px;" class="mb-3">
                 {% else %}
                     <h3 class="text-primary fw-bold">🛒 E-Commerce</h3>
                 {% endif %}
-                <h5 class="fw-bold">{{ seller.profile.business_name|default:seller.username }}</h5>
+                <h5 class="fw-bold">{{ group.seller.profile.business_name|default:group.seller.username }}</h5>
                 <p class="small text-muted mb-0">
-                    {{ seller.profile.address|linebreaksbr }}<br>
-                    Phone: {{ seller.profile.phone }}<br>
-                    {% if invoice_type == 'gst' and seller.profile.gst_number %}
-                        <strong>GSTIN: {{ seller.profile.gst_number }}</strong>
+                    {{ group.seller.profile.address|linebreaksbr }}<br>
+                    Phone: {{ group.seller.profile.phone }}<br>
+                    {% if invoice_type == 'gst' and group.seller.profile.gst_number %}
+                        <strong>GSTIN: {{ group.seller.profile.gst_number }}</strong>
                     {% endif %}
                 </p>
             </div>
@@ -78,7 +79,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in items %}
+                {% for item in group.items %}
                 <tr>
                     <td>
                         <span class="fw-bold">{{ item.product_name }}</span><br>
@@ -93,24 +94,26 @@
             <tfoot>
                 <tr>
                     <td colspan="3" class="text-end fw-bold">Subtotal</td>
-                    <td class="text-end">₹{{ total_amount }}</td>
+                    <td class="text-end">₹{{ group.subtotal }}</td>
                 </tr>
                 {% if invoice_type == 'gst' %}
                 <tr>
-                    <td colspan="3" class="text-end small">GST (18% Included)</td>
-                    <td class="text-end small">₹{{ tax_amount }}</td>
+                    <td colspan="3" class="text-end small">GST (18% Calculation)</td>
+                    <td class="text-end small">+ ₹{{ group.tax_amount }}</td>
                 </tr>
                 {% endif %}
                 <tr class="table-primary fw-bold">
                     <td colspan="3" class="text-end fs-5">Grand Total</td>
-                    <td class="text-end fs-5">₹{{ total_amount }}</td>
+                    <td class="text-end fs-5">₹{{ group.grand_total }}</td>
                 </tr>
             </tfoot>
         </table>
 
         <div class="mt-5 text-center small text-muted">
+            <p>Seller: {{ group.seller.username }} | Page {{ forloop.counter }} of {{ seller_groups|length }}</p>
             <p>Thank you for your business!<br>This is a computer-generated invoice.</p>
         </div>
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

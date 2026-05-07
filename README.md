@@ -137,6 +137,16 @@ Building Full Stack Django Ecommerce Application
   - **Clickability Fixes**: Improved CSS `z-index` layering to ensure the Logout button and sidebar items are never overlapped or unclickable.
   - **Template Improvements**: Integrated "Add to Wishlist" heart icons on all product cards and detail pages.
 
+### Phase 12: Advanced Invoicing & Product Review System
+- **Branch**: `feature/reviews-and-advanced-invoices`
+- **Features Completed**:
+  - **Product Reviews**: Implemented a comprehensive rating and review system. Customers can now rate (1-5 stars) and review products they have successfully purchased.
+  - **Flipkart-Style Ratings**: Added minimal star ratings and review counts to the product listing cards.
+  - **Advanced Invoicing**:
+    - **Multi-Seller Splitting**: Invoices now group items by seller and split into separate "pages" with unique branding/logos per seller.
+    - **GST Fix**: Corrected GST logic to add the tax amount to the subtotal for the final grand total.
+  - **Dynamic Rating Summaries**: Added detailed review lists and average rating badges to the product detail page.
+
 ---
 
 ## 🚀 Deployment Instructions

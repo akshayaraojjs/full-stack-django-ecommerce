@@ -37,7 +37,15 @@
             Sold by: <strong>{{ product.seller.username }}</strong>
         </p>
         <hr>
-        <h3 class="text-success fw-bold">₹{{ product.price }}</h3>
+        <h3 class="text-success fw-bold d-flex align-items-center gap-3">
+            ₹{{ product.price }}
+            {% if product.review_count > 0 %}
+                <span class="fs-6 fw-normal text-muted d-flex align-items-center gap-1">
+                    <span class="badge bg-success">{{ product.average_rating }} <i class="bi bi-star-fill"></i></span>
+                    {{ product.review_count }} Reviews
+                </span>
+            {% endif %}
+        </h3>
 
         <p class="mt-3">{{ product.description }}</p>
 
@@ -63,22 +71,80 @@
                             <button type="button" class="btn btn-outline-dark" id="increaseQty">+</button>
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">🛒 Add to Cart</button>
-                        <a href="{% url 'add_to_wishlist' product.pk %}" class="btn btn-outline-danger btn-lg px-4 shadow-sm">❤️ Wishlist</a>
-                    </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">🛒 Add to Cart</button>
+                            <a href="{% url 'add_to_wishlist' product.pk %}" class="btn {% if is_wishlisted %}btn-danger{% else %}btn-outline-danger{% endif %} btn-lg px-4 shadow-sm">
+                                <i class="bi {% if is_wishlisted %}bi-heart-fill{% else %}bi-heart{% endif %} me-2"></i>Wishlist
+                            </a>
+                        </div>
                 </form>
             {% else %}
                 <div class="d-flex gap-2">
                     <button class="btn btn-secondary btn-lg px-5" disabled>Out of Stock</button>
-                    <a href="{% url 'add_to_wishlist' product.pk %}" class="btn btn-outline-danger btn-lg px-4">❤️ Wishlist</a>
+                    <a href="{% url 'add_to_wishlist' product.pk %}" class="btn {% if is_wishlisted %}btn-danger{% else %}btn-outline-danger{% endif %} btn-lg px-4">
+                        <i class="bi {% if is_wishlisted %}bi-heart-fill{% else %}bi-heart{% endif %} me-2"></i>Wishlist
+                    </a>
                 </div>
-            {% endif %}
+{% endif %}
         {% elif user.role == 'Seller' %}
             <div class="alert alert-info py-2">Sellers cannot purchase products.</div>
         {% elif not user.is_authenticated %}
             <a href="{% url 'login' %}" class="btn btn-primary px-5">Login to Shop</a>
         {% endif %}
+    </div>
+</div>
+
+<!-- Reviews Section -->
+<div class="row mt-5">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">Ratings & Reviews</h5>
+            </div>
+            <div class="card-body">
+                {% if user.is_authenticated and user.role == 'Customer' %}
+                    <!-- Add Review Form (Hidden if already reviewed or not bought) -->
+                    <div class="mb-5 pb-4 border-bottom">
+                        <h6 class="fw-bold mb-3">Rate this product</h6>
+                        <form action="{% url 'add_review' product.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="small text-muted d-block mb-2">Select Rating</label>
+                                <div class="btn-group" role="group">
+                                    {% for i in "12345" %}
+                                    <input type="radio" class="btn-check" name="rating" id="star{{i}}" value="{{i}}" required>
+                                    <label class="btn btn-outline-warning" for="star{{i}}">{{i}} ⭐</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="comment" class="form-control" rows="3" placeholder="Write your experience..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-dark px-4">Submit Review</button>
+                            <p class="mt-2 small text-muted">* You can only review products you have purchased and received.</p>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <!-- Reviews List -->
+                {% if product.reviews.exists %}
+                    {% for review in product.reviews.all %}
+                    <div class="mb-4 pb-3 border-bottom last-child-no-border">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-success">{{ review.rating }} ⭐</span>
+                            <strong class="small">{{ review.user.username }}</strong>
+                            <small class="text-muted ms-auto">{{ review.created_at|date:"d M Y" }}</small>
+                        </div>
+                        <p class="mb-0 text-dark">{{ review.comment }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted">No reviews yet. Be the first to rate!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
