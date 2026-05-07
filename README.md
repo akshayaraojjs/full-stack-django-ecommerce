@@ -128,6 +128,15 @@ Building Full Stack Django Ecommerce Application
   - **Preview & Print**: Created a premium, print-friendly HTML invoice template that customers and sellers can preview and "Print to PDF".
   - **Role-Based Access**: Customers can download invoices for delivered orders, and Sellers can generate them specifically for their products.
 
+### Phase 11: Wishlist, Role-Specific Profiles & UI Refinement
+- **Branch**: `feature/final-ui-fixes`
+- **Features Completed**:
+  - **Wishlist App**: Fully implemented a Wishlist system for Customers to save products for later.
+  - **Role-Specific Forms**: Redesigned the "Edit Profile" logic to show business fields (GST/Business Name) only to Sellers, while keeping the Customer view clean.
+  - **Cart UX Fix**: Resolved an issue where the quantity number was invisible in the cart. Added `readonly` inputs with +/- controls for better usability.
+  - **Clickability Fixes**: Improved CSS `z-index` layering to ensure the Logout button and sidebar items are never overlapped or unclickable.
+  - **Template Improvements**: Integrated "Add to Wishlist" heart icons on all product cards and detail pages.
+
 ---
 
 ## 🚀 Deployment Instructions

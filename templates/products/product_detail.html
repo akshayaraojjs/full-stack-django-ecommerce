@@ -50,29 +50,34 @@
             {% endif %}
         </div>
 
-        <!-- Add to Cart Form -->
-        {% if user.is_authenticated and user.role == 'Customer' and product.stock > 0 %}
-        <form method="POST" action="{% url 'add_to_cart' product.pk %}" id="addToCartForm">
-            {% csrf_token %}
-            <div class="d-flex align-items-center gap-3 mb-3">
-                <label class="fw-bold mb-0">Qty:</label>
-                <div class="input-group" style="max-width: 140px;">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="decreaseQty">−</button>
-                    <input type="number" name="quantity" id="qtyInput" value="1" min="1" max="{{ product.stock }}" class="form-control form-control-sm text-center">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="increaseQty">+</button>
+        <!-- Add to Cart & Wishlist -->
+        {% if user.is_authenticated and user.role == 'Customer' %}
+            {% if product.stock > 0 %}
+                <form method="POST" action="{% url 'add_to_cart' product.pk %}" id="addToCartForm">
+                    {% csrf_token %}
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <label class="fw-bold mb-0 text-muted">Quantity:</label>
+                        <div class="input-group input-group-lg" style="width: 150px;">
+                            <button type="button" class="btn btn-outline-dark" id="decreaseQty">−</button>
+                            <input type="number" name="quantity" id="qtyInput" value="1" min="1" max="{{ product.stock }}" class="form-control text-center fw-bold bg-white" readonly>
+                            <button type="button" class="btn btn-outline-dark" id="increaseQty">+</button>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">🛒 Add to Cart</button>
+                        <a href="{% url 'add_to_wishlist' product.pk %}" class="btn btn-outline-danger btn-lg px-4 shadow-sm">❤️ Wishlist</a>
+                    </div>
+                </form>
+            {% else %}
+                <div class="d-flex gap-2">
+                    <button class="btn btn-secondary btn-lg px-5" disabled>Out of Stock</button>
+                    <a href="{% url 'add_to_wishlist' product.pk %}" class="btn btn-outline-danger btn-lg px-4">❤️ Wishlist</a>
                 </div>
-            </div>
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary px-5">🛒 Add to Cart</button>
-                <a href="{% url 'cart_detail' %}" class="btn btn-outline-secondary">View Cart</a>
-            </div>
-        </form>
+            {% endif %}
         {% elif user.role == 'Seller' %}
             <div class="alert alert-info py-2">Sellers cannot purchase products.</div>
         {% elif not user.is_authenticated %}
-            <a href="{% url 'login' %}" class="btn btn-primary px-5">Login to Add to Cart</a>
-        {% else %}
-            <button class="btn btn-secondary px-5" disabled>Out of Stock</button>
+            <a href="{% url 'login' %}" class="btn btn-primary px-5">Login to Shop</a>
         {% endif %}
     </div>
 </div>

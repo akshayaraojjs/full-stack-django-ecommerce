@@ -59,12 +59,18 @@ body {
 /* Sidebar and Clickability Fixes */
 .list-group-item {
     position: relative;
-    z-index: 2;
+    z-index: 5;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .list-group-item:hover {
-    z-index: 3;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.text-danger.list-group-item {
+    z-index: 15 !important;
 }
 
 /* Ensure main content is not overlapped */

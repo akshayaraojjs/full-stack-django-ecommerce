@@ -48,15 +48,31 @@ class UserUpdateForm(forms.ModelForm):
 
 from .models import UserProfile
 
-class UserProfileForm(forms.ModelForm):
+class CustomerProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['business_name', 'gst_number', 'phone', 'address', 'profile_image']
+        fields = ['phone', 'address', 'profile_image']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            # Check if it's a file input specifically, as Textarea doesn't have input_type
+            if isinstance(field.widget, forms.ClearableFileInput):
+                field.widget.attrs['class'] = 'form-control-file'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+
+class SellerProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['business_name', 'gst_number', 'phone', 'address', 'profile_image']
+        labels = {
+            'address': 'Store/Business Address',
+            'profile_image': 'Company Logo'
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
             if isinstance(field.widget, forms.ClearableFileInput):
                 field.widget.attrs['class'] = 'form-control-file'
             else:

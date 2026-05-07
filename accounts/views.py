@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import CustomerRegistrationForm, SellerRegistrationForm, UserLoginForm, UserUpdateForm, UserProfileForm
+from .forms import CustomerRegistrationForm, SellerRegistrationForm, UserLoginForm, UserUpdateForm
 
 def register_customer(request):
     if request.method == 'POST':
@@ -57,11 +57,16 @@ def role_based_redirect(user):
 @login_required
 def edit_profile(request):
     from .models import UserProfile
+    from .forms import UserUpdateForm, CustomerProfileForm, SellerProfileForm
+    
     profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    # Select form based on user role
+    FormClass = SellerProfileForm if request.user.role == 'Seller' else CustomerProfileForm
 
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        p_form = FormClass(request.POST, request.FILES, instance=profile)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
@@ -69,7 +74,7 @@ def edit_profile(request):
             return role_based_redirect(request.user)
     else:
         u_form = UserUpdateForm(instance=request.user)
-        p_form = UserProfileForm(instance=profile)
+        p_form = FormClass(instance=profile)
         
     context = {
         'u_form': u_form,

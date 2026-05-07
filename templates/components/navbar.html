@@ -45,6 +45,7 @@
                         </li>
                         {% if user.role == 'Customer' %}
                         <li><a class="dropdown-item" href="{% url 'cart_detail' %}">My Cart</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wishlist_detail' %}">❤️ Wishlist</a></li>
                         {% endif %}
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>

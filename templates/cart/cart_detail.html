@@ -46,12 +46,12 @@
                         <div class="col-auto">
                             <form method="POST" action="{% url 'update_cart' item.pk %}" class="update-cart-form d-flex align-items-center gap-2">
                                 {% csrf_token %}
-                                <div class="input-group" style="max-width: 130px;">
-                                    <button type="button" class="btn btn-outline-secondary btn-sm qty-decrease" data-target="qty-{{ item.pk }}">−</button>
+                                <div class="input-group input-group-sm" style="width: 110px;">
+                                    <button type="button" class="btn btn-outline-dark qty-decrease" data-target="qty-{{ item.pk }}">−</button>
                                     <input type="number" name="quantity" id="qty-{{ item.pk }}"
                                            value="{{ item.quantity }}" min="0" max="{{ item.product.stock }}"
-                                           class="form-control form-control-sm text-center qty-input">
-                                    <button type="button" class="btn btn-outline-secondary btn-sm qty-increase" data-target="qty-{{ item.pk }}" data-max="{{ item.product.stock }}">+</button>
+                                           class="form-control text-center fw-bold bg-white" readonly>
+                                    <button type="button" class="btn btn-outline-dark qty-increase" data-target="qty-{{ item.pk }}" data-max="{{ item.product.stock }}">+</button>
                                 </div>
                                 <button type="submit" class="btn btn-sm btn-primary">Update</button>
                             </form>
