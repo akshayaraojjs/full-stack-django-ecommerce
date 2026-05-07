@@ -81,8 +81,13 @@ def order_success(request, order_uuid):
 @login_required
 def order_history(request):
     """List all orders for the logged-in customer."""
-    orders = Order.objects.filter(customer=request.user).prefetch_related('items')
-    return render(request, 'orders/order_history.html', {'orders': orders})
+    status_filter = request.GET.get('status')
+    orders = Order.objects.filter(customer=request.user).prefetch_related('items').order_by('-created_at')
+    
+    if status_filter:
+        orders = orders.filter(order_status=status_filter)
+        
+    return render(request, 'orders/order_history.html', {'orders': orders, 'current_status': status_filter})
 
 
 @login_required
@@ -119,10 +124,15 @@ def seller_orders(request):
     if request.user.role != 'Seller':
         return redirect('home')
 
+    status_filter = request.GET.get('status')
     # Get unique orders where at least one item belongs to this seller
     order_ids = OrderItem.objects.filter(seller=request.user).values_list('order_id', flat=True).distinct()
-    orders = Order.objects.filter(order_uuid__in=order_ids).prefetch_related('items')
-    return render(request, 'orders/seller/seller_orders.html', {'orders': orders})
+    orders = Order.objects.filter(order_uuid__in=order_ids).prefetch_related('items').order_by('-created_at')
+    
+    if status_filter:
+        orders = orders.filter(order_status=status_filter)
+        
+    return render(request, 'orders/seller/seller_orders.html', {'orders': orders, 'current_status': status_filter})
 
 
 @login_required

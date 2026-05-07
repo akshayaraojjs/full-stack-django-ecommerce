@@ -4,7 +4,17 @@
 
 {% block content %}
 <div class="mt-4">
-    <h4 class="fw-bold mb-4">📦 Orders Received</h4>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">📦 Orders Received</h4>
+        <div class="btn-group shadow-sm">
+            <a href="?" class="btn btn-outline-dark btn-sm {% if not current_status %}active{% endif %}">All</a>
+            <a href="?status=pending" class="btn btn-outline-secondary btn-sm {% if current_status == 'pending' %}active{% endif %}">Pending</a>
+            <a href="?status=confirmed" class="btn btn-outline-primary btn-sm {% if current_status == 'confirmed' %}active{% endif %}">Confirmed</a>
+            <a href="?status=processing" class="btn btn-outline-warning btn-sm {% if current_status == 'processing' %}active{% endif %}">Processing</a>
+            <a href="?status=shipped" class="btn btn-outline-info btn-sm {% if current_status == 'shipped' %}active{% endif %}">Shipped</a>
+            <a href="?status=delivered" class="btn btn-outline-success btn-sm {% if current_status == 'delivered' %}active{% endif %}">Delivered</a>
+        </div>
+    </div>
 
     {% if orders %}
     <div class="table-responsive">
@@ -17,7 +27,7 @@
                     <th>Order Total</th>
                     <th>Status</th>
                     <th>Date</th>
-                    <th>Update Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,7 +59,7 @@
                         {% if order.order_status != 'cancelled' and order.order_status != 'delivered' %}
                         <form method="POST" action="{% url 'update_order_status' order.order_uuid %}" class="d-flex gap-1">
                             {% csrf_token %}
-                            <select name="order_status" class="form-select form-select-sm">
+                            <select name="order_status" class="form-select form-select-sm" style="min-width: 120px;">
                                 <option value="confirmed"  {% if order.order_status == 'confirmed' %}selected{% endif %}>Confirmed</option>
                                 <option value="processing" {% if order.order_status == 'processing' %}selected{% endif %}>Processing</option>
                                 <option value="shipped"    {% if order.order_status == 'shipped' %}selected{% endif %}>Shipped</option>
@@ -57,6 +67,8 @@
                             </select>
                             <button type="submit" class="btn btn-sm btn-primary">✔</button>
                         </form>
+                        {% elif order.order_status == 'delivered' %}
+                            <span class="badge bg-success opacity-75">Completed</span>
                         {% else %}
                             <span class="text-muted small">—</span>
                         {% endif %}

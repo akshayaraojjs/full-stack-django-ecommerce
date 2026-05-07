@@ -56,6 +56,23 @@ body {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
+/* Sidebar and Clickability Fixes */
+.list-group-item {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.list-group-item:hover {
+    z-index: 3;
+}
+
+/* Ensure main content is not overlapped */
+main {
+    position: relative;
+    z-index: 1;
+}
+
 /* Badge Refinement */
 .badge {
     padding: 6px 12px;
